@@ -1,0 +1,20 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="ehcache.xsd">
+	<cache 
+		name="statusConta" 
+		maxEntriesLocalHeap="200"
+		timeToLiveSeconds="86400000">
+	</cache>
+	
+	<cache 
+		name="tipoConta" 
+		maxEntriesLocalHeap="200"
+		timeToLiveSeconds="86400000">
+	</cache>
+	
+	<cache 
+		name="listarContasPorMes" 
+		maxEntriesLocalHeap="200"
+		timeToLiveSeconds="86400000">
+	</cache>
+</ehcache>
