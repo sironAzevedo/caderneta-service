@@ -1,18 +1,21 @@
 package br.com.caderneta.service.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.caderneta.service.configuracao.email.EmailConfig;
-import br.com.caderneta.service.configuracao.email.EmailConfigDTO;
 import br.com.caderneta.service.configuracao.email.Mensagem;
 import br.com.caderneta.service.service.IEmailService;
 
 @Service
-public class EmailServiceImpl extends EmailConfigDTO implements IEmailService {
+public class EmailServiceImpl implements IEmailService {
+	
+	@Autowired
+	private EmailConfig email;
 	
 	@Override
 	public void sendEmail(Mensagem msg) {
-		EmailConfig.sendEmail(msg, this);
+		email.sendEmail(msg);
 	}
 
 	@Override

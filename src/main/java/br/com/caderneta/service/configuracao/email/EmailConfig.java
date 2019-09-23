@@ -21,25 +21,60 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import br.com.caderneta.service.common.exceptions.EmailException;
 import br.com.caderneta.service.configuracao.seguranca.CredenciaisDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public final class EmailConfig {
+@Component
+public class EmailConfig {
 
-	public static final void sendEmail(Mensagem mensagem, EmailConfigDTO config) {
-		Message msg = new MimeMessage(getSession(config));
+	@Value("${mail.smtp.host}")
+	private String host;
+	@Value("${mail.smtp.port}")
+	private String port;
+	@Value("${mail.smtp.from}")
+	private String from;
+	@Value("${mail.username}")
+	private String userName;
+	@Value("${mail.password}")
+	private String password;
+	@Value("${mail.transport.protocol}")
+	private String transportProtocol;
+	@Value("${mail.smtp.auth}")
+	private String smtpAuth;
+	@Value("${mail.smtp.starttls.enable}")
+	private String starttlsEnable;
+	@Value("${mail.smtp.starttls.required}")
+	private String starttlsRequired;
+	@Value("${mail.smtp.ssl.enable}")
+	private String smtpSslEnable;
+	@Value("${mail.test-connection}")
+	private String testConnection;
+	@Value("${mail.smtp.debug}")
+	private String smtpDebug;
+	@Value("${mail.smtp.socketFactory.port}")
+	private String smtpSocketFactoryPort;
+	@Value("${mail.smtp.socketFactory.class}")
+	private String smtpSocketFactoryClass;
+	@Value("${mail.smtp.socketFactory.fallback}")
+	private String smtpSocketFactoryFallback;
+
+	public void sendEmail(Mensagem mensagem) {
+		Message msg = new MimeMessage(getSession());
 
 		try {
-			msg.setFrom(new InternetAddress(config.getFrom()));
-			
-			if(mensagem.getDestinatarios() != null) {
+			msg.setFrom(new InternetAddress(from));
+
+			if (mensagem.getDestinatarios() != null) {
 				msg.setRecipients(Message.RecipientType.TO, getAddress(mensagem.getDestinatarios()));
-			}else {
+			} else {
 				msg.setRecipient(Message.RecipientType.TO, new InternetAddress(mensagem.getDestinatario()));
 			}
-			
+
 			msg.setSubject(mensagem.getAssunto());
 
 			String anexo = null;
@@ -51,24 +86,24 @@ public final class EmailConfig {
 				msg.setText(mensagem.getTexto());
 			}
 
-			getTransport(msg, config);
+			getTransport(msg);
 			log.info("E-mail enviado com sucesso");
 		} catch (Exception e) {
 			throw new EmailException("E-mail não enviado: " + e.getLocalizedMessage());
 		}
 	}
 
-	protected static Session getSession(EmailConfigDTO config) {
-		Session session = Session.getInstance(emailProperties(config), auth(config));
+	protected Session getSession() {
+		Session session = Session.getInstance(emailProperties(), auth());
 		session.setDebug(true);
 		return session;
 	}
 
-	protected static Authenticator auth(EmailConfigDTO config) {
-		return new CredenciaisDTO(config.getUserName(), config.getPassword());
+	protected Authenticator auth() {
+		return new CredenciaisDTO(userName, password);
 	}
 
-	protected static Address[] getAddress(Set<EmailDTO> destinatarios) throws AddressException {
+	protected Address[] getAddress(Set<EmailDTO> destinatarios) throws AddressException {
 		List<EmailDTO> destinatario = new ArrayList<>(destinatarios);
 		InternetAddress[] address = new InternetAddress[destinatario.size()];
 		for (int i = 0; i < destinatario.size(); i++) {
@@ -77,7 +112,7 @@ public final class EmailConfig {
 		return address;
 	}
 
-	protected static Multipart getAnexo(Message msg, String mensagem, String anexo) {
+	protected Multipart getAnexo(Message msg, String mensagem, String anexo) {
 		MimeBodyPart mpb = new MimeBodyPart();
 		Multipart mp = new MimeMultipart();
 		MimeBodyPart mbpAnexo = new MimeBodyPart();
@@ -97,12 +132,12 @@ public final class EmailConfig {
 		return mp;
 	}
 
-	protected static void getTransport(Message msg, EmailConfigDTO config) {
+	protected void getTransport(Message msg) {
 		Transport transport;
 
 		try {
-			transport = getSession(config).getTransport(config.getTransportProtocol());
-			transport.connect(config.getHost(), config.getUserName(), config.getPassword());
+			transport = getSession().getTransport(transportProtocol);
+			transport.connect(host, userName, password);
 			msg.saveChanges();
 			transport.sendMessage(msg, msg.getAllRecipients());
 			transport.close();
@@ -111,22 +146,18 @@ public final class EmailConfig {
 		}
 	}
 
-	protected static Properties emailProperties(EmailConfigDTO config) {
+	protected Properties emailProperties() {
 		Properties prop = new Properties();
-		prop.put("mail.smtp.host", config.getHost());
-		prop.put("mail.smtp.port", config.getPort());
-		prop.put("mail.smtp.user", config.getUserName());
-		prop.put("mail.transport.protocol", config.getTransportProtocol());
-		prop.put("mail.smtp.auth", config.getSmtpAuth());
-		prop.put("mail.smtp.starttls.enable", config.getStarttlsEnable());
-		prop.put("mail.smtp.socketFactory.port", config.getSmtpSocketFactoryPort());
-		prop.put("mail.smtp.socketFactory.class", config.getSmtpSocketFactoryClass());
-		prop.put("mail.smtp.socketFactory.fallback", config.getSmtpSocketFactoryFallback());
-		prop.put("mail.smtp.debug", config.getSmtpDebug());
+		prop.put("mail.smtp.host", host);
+		prop.put("mail.smtp.port", port);
+		prop.put("mail.smtp.user", userName);
+		prop.put("mail.transport.protocol", transportProtocol);
+		prop.put("mail.smtp.auth", smtpAuth);
+		prop.put("mail.smtp.starttls.enable", starttlsEnable);
+		prop.put("mail.smtp.socketFactory.port", smtpSocketFactoryPort);
+		prop.put("mail.smtp.socketFactory.class", smtpSocketFactoryClass);
+		prop.put("mail.smtp.socketFactory.fallback", smtpSocketFactoryFallback);
+		prop.put("mail.smtp.debug", smtpDebug);
 		return prop;
-	}
-
-	private EmailConfig() {
-		super();
 	}
 }
