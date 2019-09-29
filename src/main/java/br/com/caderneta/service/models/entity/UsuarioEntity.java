@@ -84,14 +84,14 @@ public class UsuarioEntity implements Serializable {
 	@Setter
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
     private Collection<ContaEntity> contas;
 	
 	@Getter
 	@Setter
     @JsonIgnore
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
     private Collection<MesSalarioEntity> salario;
 
 	@Getter

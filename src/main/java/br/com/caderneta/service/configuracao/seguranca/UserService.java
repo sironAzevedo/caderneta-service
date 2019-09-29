@@ -2,6 +2,8 @@ package br.com.caderneta.service.configuracao.seguranca;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import br.com.caderneta.service.common.exceptions.UserException;
+
 public final class UserService {
 
 	public static User authenticated() {
@@ -9,7 +11,7 @@ public final class UserService {
 			return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		}
 		catch (Exception e) {
-			return null;
+			throw new UserException(e.getLocalizedMessage());
 		}
 	}
 

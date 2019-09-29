@@ -58,8 +58,8 @@ public class ContaController {
 	@ResponseBody
 	@DeleteMapping(value = "/conta")
 	@ResponseStatus(value = HttpStatus.OK)
-	public void deletarConta(@RequestParam(value = "conta") Long id) {
-		service.deletar(id);
+	public void deletarConta(@RequestBody ContaDTO dto) {
+		service.deletar(dto);
 	}
 
 	@ResponseBody
