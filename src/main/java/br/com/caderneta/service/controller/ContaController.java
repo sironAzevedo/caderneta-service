@@ -40,6 +40,13 @@ public class ContaController {
 	public void atualizar(@RequestBody ContaDTO dto) {
 		this.service.atualizar(dto);
 	}
+	
+	@ResponseBody
+	@DeleteMapping(value = "/conta")
+	@ResponseStatus(value = HttpStatus.OK)
+	public void deletarConta(@RequestParam(value = "conta") Long id) {
+		service.deletar(id);
+	}
 
 	@ResponseBody
 	@GetMapping(value = "/contas")
@@ -53,14 +60,7 @@ public class ContaController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public ContaDTO buscarConta(@RequestParam(value = "id") Long id) {
 		return service.buscarContaPorId(id);
-	}
-
-	@ResponseBody
-	@DeleteMapping(value = "/conta")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void deletarConta(@RequestBody ContaDTO dto) {
-		service.deletar(dto);
-	}
+	} 
 
 	@ResponseBody
 	@GetMapping(value = "/conta/mes")

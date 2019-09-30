@@ -23,6 +23,6 @@ public interface IContaService {
 	
 	List<StatusContaDTO> buscarStatusConta();
 
-	void deletar(ContaDTO dto);
+	void deletar(Long id);
 
 }

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import br.com.caderneta.service.common.enums.StatusConta;
 import br.com.caderneta.service.common.exceptions.EmptyResultDataAccessException;
-import br.com.caderneta.service.common.exceptions.NotFoundException;
 import br.com.caderneta.service.common.exceptions.QuantidadeParcelasException;
 import br.com.caderneta.service.configuracao.seguranca.User;
 import br.com.caderneta.service.configuracao.seguranca.UserService;
@@ -98,13 +97,9 @@ public class ContaServiceImpl implements IContaService {
 	}
 	
 	@Override
-	public void deletar(ContaDTO dto) {
-		try {
-			Optional<ContaEntity> c = Optional.ofNullable(repository.findById(dto.getCodigo())).orElseThrow(() -> new EmptyResultDataAccessException("Conta não encontrada"));
-			repository.delete(c.get());
-		} catch (Exception e) {
-			throw new NotFoundException(e.getLocalizedMessage());
-		} 
+	public void deletar(Long id) {
+		buscarContaPorId(id);
+		repository.deleteById(id);
 	}
 
 	@Override
