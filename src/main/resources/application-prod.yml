@@ -29,6 +29,10 @@ spring:
         type: info
         use_sql_comments: true
 
+logging:
+  pattern:
+    console: '%d{dd/MM/yyyy HH:mm:ss} - %-5level - %msg%n'
+
 jwt:
   expiration: 604800000 #duração de 7 dias
   secret: '@POE&L3tF?6754j4zZ&L55!nU23er4!eT65gtgf&&D'
