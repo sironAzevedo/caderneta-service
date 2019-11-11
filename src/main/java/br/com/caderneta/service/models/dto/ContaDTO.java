@@ -38,12 +38,12 @@ public class ContaDTO implements Serializable {
 	@Getter
 	@Setter
 	@NotEmpty(message = "Campo Obrigatorio")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "America/Sao_Paulo")
 	private Date dataVencimento;
 
 	@Getter
 	@Setter
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "America/Sao_Paulo")
 	private Date dataPagamento;
 	
 	@Getter
