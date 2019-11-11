@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: 'jdbc:postgresql://tuffi.db.elephantsql.com:5432/rzyvkxue'
-    username: 'rzyvkxue'
-    password: 'mtGuAZ5Iv7z6-itBUOQTbAlsETPSGh1r'
+    url: ''
+    username: ''
+    password: ''
     tomcat:
       test-while-idle: true
       validation-query: SELECT 1
@@ -35,4 +35,4 @@ logging:
 
 jwt:
   expiration: 86400000 #duração de 1 dias
-  secret: 'SequenciaDeCaracteresParaAssinarToken'
+  secret: ''

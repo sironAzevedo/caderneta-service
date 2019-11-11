@@ -11,8 +11,8 @@ server:
     context-path: /sgcp      
 
 aws:
-  access_key_id: 'AKIAVFGZ47BFSE26KA5X'
-  secret_access_key: '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'
+  access_key_id: ''
+  secret_access_key: ''
   
 img:
   prefix:
@@ -22,12 +22,12 @@ img:
     size: 200
     
 mail:
-  username: 'casamentosironjamile@gmail.com'
-  password: 'cSJ310318'
+  username: ''
+  password: ''
   smtp:
     auth: true
     debug: true
-    from: 'casamentosironjamile@gmail.com'
+    from: ''
     host: smtp.googlemail.com
     port: 465
     socketFactory:
