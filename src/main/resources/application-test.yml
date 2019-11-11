@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    password: ''
+    url: jdbc:h2:mem:testdb;INIT=CREATE SCHEMA IF NOT EXISTS SGCP;DB_CLOSE_DELAY=-1
+    username: sa
+  h2:
+    console:
+      enabled: true
+      path: '/h2-console'
+  jpa:
+    generate-ddl: 'true'
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        default_schema: SGCP
+        dialect: 'org.hibernate.dialect.H2Dialect  '
+        format_sql: true
+        show_sql: true
+    show-sql: true

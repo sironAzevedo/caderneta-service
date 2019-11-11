@@ -1,7 +1,6 @@
 package br.com.caderneta.service.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +31,13 @@ public class TipoContaServiceImpl implements ITipoContaService {
 	}
 
 	@Override
-	public TipoContaDTO buscarPorCodigo(Long codigo) {
-		Optional<TipoContaEntity> obj = Optional.ofNullable(repo.findById(codigo))
+	public TipoContaDTO buscarTipoConta(Long codigo) {
+		TipoContaEntity obj = repo.findById(codigo)
 				.orElseThrow(() -> new EmptyResultDataAccessException("Tipo não encontrado"));
 		return TipoContaDTO.builder()
-				.codigo(obj.get().getCodigo())
-				.tipo(obj.get().getTipo())
-				.descricao(obj.get().getDescricao())
+				.codigo(obj.getCodigo())
+				.tipo(obj.getTipo())
+				.descricao(obj.getDescricao())
 				.build();
 	} 
 }

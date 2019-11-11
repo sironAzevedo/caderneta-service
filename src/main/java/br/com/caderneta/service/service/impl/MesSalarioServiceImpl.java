@@ -4,7 +4,6 @@ import static br.com.caderneta.service.common.util.CadernetaUtil.formatValor;
 import static br.com.caderneta.service.common.util.CadernetaUtil.parseObject;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,51 +34,48 @@ public class MesSalarioServiceImpl implements IMesSalarioService {
 
 	@Override
 	public void salvar(MesSalarioDTO dto) {
-		
-		if(repository.existsByMes(new MesEntity(dto.getMes()))) {
+
+		if (repository.existsByMes(new MesEntity(dto.getMes()))) {
 			throw new NotFoundException("Já foi cadastro um salario para mês de " + dto.getMes().getDsMes());
 		}
-		
+
 		UsuarioDTO user = userService.recuperarUsuarioLogado();
-		dto.setUsuario(user); 
+		dto.setUsuario(user);
 		repository.saveAndFlush(new MesSalarioEntity(dto));
 	}
-	
+
 	@Override
 	public void atualizar(MesSalarioDTO dto) {
 		repository.saveAndFlush(new MesSalarioEntity(this.buscarPorCodigo(dto)));
 	}
-	
+
 	@Override
 	public void deletar(MesSalarioDTO dto) {
-		repository.delete(new MesSalarioEntity(this.buscarPorCodigo(dto)));		
+		repository.delete(new MesSalarioEntity(this.buscarPorCodigo(dto)));
 	}
 
 	@Override
 	public List<MesSalarioDTO> buscarTodos() {
 		UsuarioEntity usuario = (UsuarioEntity) parseObject(userService.recuperarUsuarioLogado(), new UsuarioEntity());
-		return repository.findByUsuario(usuario).stream().map(s -> 
-			
-			MesSalarioDTO.builder()
+		return repository.findByUsuario(usuario).stream().map(s ->
+
+		MesSalarioDTO.builder()
 			.codigo(s.getCodigo())
 			.valorSalario(formatValor(s.getValorSalario()))
 			.mes((MesDTO) parseObject(s.getMes(), new MesDTO()))
-			.build()
-		).collect(Collectors.toList());
+			.build())
+		.collect(Collectors.toList());
 	}
 
 	@Override
 	public MesSalarioDTO buscarPorCodigo(MesSalarioDTO dto) {
 		User user = UserService.authenticated();
-		
-		Optional<MesSalarioEntity> salario = Optional.ofNullable(repository.findById(dto.getCodigo()))
+
+		MesSalarioEntity salario = repository.findById(dto.getCodigo())
 				.orElseThrow(() -> new EmptyResultDataAccessException("Conta não encontrada"));
-		userService.userValid(user, salario.get().getUsuario().getCodigo());
-		
-		return MesSalarioDTO.builder()
-				.codigo(salario.get().getCodigo())
-				.valorSalario(formatValor(salario.get().getValorSalario()))
-				.mes((MesDTO) parseObject(salario.get().getMes(), new MesDTO()))
-				.build();
+		userService.userValid(user, salario.getUsuario().getCodigo());
+
+		return MesSalarioDTO.builder().codigo(salario.getCodigo()).valorSalario(formatValor(salario.getValorSalario()))
+				.mes((MesDTO) parseObject(salario.getMes(), new MesDTO())).build();
 	}
 }

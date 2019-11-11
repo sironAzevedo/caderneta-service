@@ -8,5 +8,5 @@ public interface ITipoContaService {
 	
 	List<TipoContaDTO> buscarTodos();
 
-	TipoContaDTO buscarPorCodigo(Long codigo);
+	TipoContaDTO buscarTipoConta(Long codigo);
 }

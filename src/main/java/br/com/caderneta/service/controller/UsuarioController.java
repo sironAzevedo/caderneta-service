@@ -36,9 +36,9 @@ public class UsuarioController {
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
 	@PostMapping(value = "/user", produces = "application/json; charset=UTF-8")
-	public String criar(@Valid @RequestBody UsuarioDTO dto) {
-		log.info("O serviço /criarUser foi acionado");
-		service.salvar(dto);
+	public String criarUsuario(@Valid @RequestBody UsuarioDTO dto) {
+		log.info("O serviço /criarUsuario foi acionado");
+		service.criarUsuario(dto);
 		
 		String res = "Cadastro realizado com sucesso";
 		return "{\"mensagem\": \"" + res + "\"}";
@@ -47,9 +47,9 @@ public class UsuarioController {
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.OK)
 	@PutMapping(value = "/user", produces = "application/json; charset=UTF-8")
-	public String atualiar(@Valid @RequestBody UsuarioDTO dto) {
+	public String atualiarUsuario(@Valid @RequestBody UsuarioDTO dto) {
 		log.info("O serviço /atualizarUser foi acionado");
-		service.atualizar(dto);
+		service.atualizarUsuario(dto);
 		String res = "Cadastro atualizado com sucesso";
 		return "{\"mensagem\": \"" + res + "\"}";
 	}
@@ -58,34 +58,34 @@ public class UsuarioController {
 	@DeleteMapping(value = "/user")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@ResponseStatus(value = HttpStatus.OK)
-	public String deletar(@Valid @RequestBody UsuarioDTO dto) {
+	public String deletarUsuario(@Valid @RequestBody UsuarioDTO dto) {
 		log.info("O serviço /deletarUser foi acionado");
-		service.deletar(dto);
+		service.deletarUsuario(dto);
 		return "User delete successfully!";
 	}
 
 	@ResponseBody
 	@GetMapping(value = "/users")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<UsuarioDTO> findAll() {
+	public List<UsuarioDTO> buscarUsuarios() {
 		log.info("O serviço consultar todos os usuarios foi acionado");
-		return service.findAll();
+		return service.buscarUsuarios();
 	}
 	
 	@ResponseBody
 	@GetMapping(value = "/user")
 	@ResponseStatus(value = HttpStatus.OK)
-	public UsuarioDTO find(@RequestBody UsuarioDTO user) {
+	public UsuarioDTO buscarUsuario(@RequestBody UsuarioDTO user) {
 		log.info("O serviço consultar usuario por ID foi acionado");
-		return service.find(user);
+		return service.buscarUsuario(user);
 	}
 	
 	@ResponseBody
 	@GetMapping(value = "/user/email")
 	@ResponseStatus(value = HttpStatus.OK)
-	public UsuarioDTO find(@RequestParam(value="email") String email) {
+	public UsuarioDTO buscarUsuarioPorEmail(@RequestParam(value="email") String email) {
 		log.info("O serviço consultar usuario por E-mail foi acionado");
-		return service.findEmail(email);
+		return service.buscarUsuarioPorEmail(email);
 	}
 	
 	@ResponseBody

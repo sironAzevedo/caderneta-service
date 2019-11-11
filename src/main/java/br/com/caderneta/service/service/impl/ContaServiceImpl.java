@@ -124,19 +124,19 @@ public class ContaServiceImpl implements IContaService {
 	@Override
 	public ContaDTO buscarContaPorId(Long id) {
 		User user = UserService.authenticated();
-		Optional<ContaEntity> c = Optional.ofNullable(repository.findById(id)).orElseThrow(() -> new EmptyResultDataAccessException("Conta não encontrada"));
-		userService.userValid(user, c.get().getUsuario().getCodigo());
+		ContaEntity c = repository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Conta não encontrada"));
+		userService.userValid(user, c.getUsuario().getCodigo());
 		
 		return ContaDTO.builder()
-				.codigo(c.get().getCodigo())
-				.valorConta(formatValor(c.get().getValorConta()))
-				.dataVencimento(c.get().getDataVencimento())
-				.dataPagamento(c.get().getDataPagamento())
-				.status((StatusContaDTO) parseObject(c.get().getStatus(), new StatusContaDTO()))
-				.qtdParcelas(c.get().getQtdParcelas())
-				.comentario(c.get().getComentario())
-				.mes(MesDTO.builder().codigo(c.get().getMes().getCodigo()).dsMes(c.get().getMes().getDsMes()).build())
-				.tipoConta((TipoContaDTO) parseObject(c.get().getTipoConta(), new TipoContaDTO()))
+				.codigo(c.getCodigo())
+				.valorConta(formatValor(c.getValorConta()))
+				.dataVencimento(c.getDataVencimento())
+				.dataPagamento(c.getDataPagamento())
+				.status((StatusContaDTO) parseObject(c.getStatus(), new StatusContaDTO()))
+				.qtdParcelas(c.getQtdParcelas())
+				.comentario(c.getComentario())
+				.mes(MesDTO.builder().codigo(c.getMes().getCodigo()).dsMes(c.getMes().getDsMes()).build())
+				.tipoConta((TipoContaDTO) parseObject(c.getTipoConta(), new TipoContaDTO()))
 				.build(); 
 	} 
 

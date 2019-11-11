@@ -26,7 +26,7 @@ public class TipoContaController {
 	@ResponseBody
 	@GetMapping(value = "/tipo/contas")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<TipoContaDTO> consultar() {
+	public List<TipoContaDTO> consultarTipoConta() {
 		log.info("O serviço Buscar Tipo Conta foi acionado");
 		return service.buscarTodos();
 	}
@@ -34,8 +34,8 @@ public class TipoContaController {
 	@ResponseBody
 	@GetMapping(value = "/tipo/conta")
 	@ResponseStatus(value = HttpStatus.OK)
-	public TipoContaDTO buscarMesPorID(@RequestParam(value = "tipo") Long tipo) {
+	public TipoContaDTO buscarTipoConta(@RequestParam(value = "tipo") Long tipo) {
 		log.info("O serviço Buscar Tipo Conta Por ID foi acionado");
-		return service.buscarPorCodigo(tipo);
+		return service.buscarTipoConta(tipo);
 	}
 }

@@ -11,17 +11,17 @@ import br.com.caderneta.service.models.dto.UsuarioDTO;
 
 public interface IUsuarioService {
 	
-	void salvar(UsuarioDTO dto);
+	void criarUsuario(UsuarioDTO dto);
 	
-	void atualizar(UsuarioDTO dto);
+	void atualizarUsuario(UsuarioDTO dto);
 	
-	void deletar(UsuarioDTO dto);
+	void deletarUsuario(UsuarioDTO dto);
 	
-	List<UsuarioDTO> findAll();
+	List<UsuarioDTO> buscarUsuarios();
 
-	UsuarioDTO find(UsuarioDTO user);
+	UsuarioDTO buscarUsuario(UsuarioDTO user);
 	
-	UsuarioDTO findEmail(String email);
+	UsuarioDTO buscarUsuarioPorEmail(String email);
 	
 	UsuarioDTO recuperarUsuarioLogado();
 	

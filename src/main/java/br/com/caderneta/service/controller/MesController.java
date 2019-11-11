@@ -26,7 +26,7 @@ public class MesController {
 	@ResponseBody
 	@GetMapping(value = "/meses")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<MesDTO> consultar() {
+	public List<MesDTO> consultarMeses() {
 		log.info("O serviço Buscar Todos Meses foi acionado");
 		return service.findAll();
 	}

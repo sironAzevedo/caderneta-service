@@ -30,14 +30,14 @@ public class ContaController {
 	@ResponseBody
 	@PostMapping(value = "/conta")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void insert(@RequestBody ContaDTO dto) {
+	public void salvarConta(@RequestBody ContaDTO dto) {
 		this.service.salvar(dto);
 	}
 
 	@ResponseBody
 	@PutMapping(value = "/conta")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void atualizar(@RequestBody ContaDTO dto) {
+	public void atualizarConta(@RequestBody ContaDTO dto) {
 		this.service.atualizar(dto);
 	}
 	

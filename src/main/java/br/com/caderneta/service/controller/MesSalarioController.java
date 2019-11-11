@@ -31,7 +31,7 @@ public class MesSalarioController {
 	@ResponseBody
 	@PostMapping(value = "/salario")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void salvar(@Valid @RequestBody MesSalarioDTO dto) {
+	public void salvarMesSalario(@Valid @RequestBody MesSalarioDTO dto) {
 		log.info("O serviço salvar Mes Salario foi acionado");
 		service.salvar(dto);
 	}
@@ -39,7 +39,7 @@ public class MesSalarioController {
 	@ResponseBody
 	@PutMapping(value = "/salario")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void atualizar(@Valid @RequestBody MesSalarioDTO dto) {
+	public void atualizarMesSalario(@Valid @RequestBody MesSalarioDTO dto) {
 		log.info("O serviço Atualiza Mes Salario foi acionado");
 		service.atualizar(dto);
 	}
@@ -47,7 +47,7 @@ public class MesSalarioController {
 	@ResponseBody
 	@GetMapping(value = "/salarios")
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<MesSalarioDTO> consultar() {
+	public List<MesSalarioDTO> consultarMesSalario() {
 		log.info("O serviço Buscar Todos Mes Salario foi acionado");
 		return service.buscarTodos();
 	}
@@ -63,7 +63,7 @@ public class MesSalarioController {
 	@ResponseBody
 	@DeleteMapping(value = "/salario")
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void deletar(@Valid @RequestBody MesSalarioDTO dto) {
+	public void deletarMesSalario(@Valid @RequestBody MesSalarioDTO dto) {
 		log.info("O serviço deletar Mes Salario foi acionado");
 		service.deletar(dto);
 	}

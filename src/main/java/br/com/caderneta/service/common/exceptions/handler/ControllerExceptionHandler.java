@@ -48,8 +48,6 @@ public class ControllerExceptionHandler {
 		return StandardError.builder()
 				.status(HttpStatus.NOT_FOUND.value())
 				.mensagem(e.getMessage())
-				.metodo(request.getMethod())
-				.path(request.getRequestURI())
 				.timestamp(new Date())
 				.build();
 	} 

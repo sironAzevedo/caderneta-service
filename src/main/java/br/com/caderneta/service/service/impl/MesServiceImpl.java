@@ -1,7 +1,6 @@
 package br.com.caderneta.service.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,8 @@ public class MesServiceImpl implements IMesService {
 
 	@Override
 	public MesDTO buscarPorCodigo(Long codigo) {
-		Optional<MesEntity> obj = Optional.ofNullable(repo.findById(codigo))
-				.orElseThrow(() -> new EmptyResultDataAccessException("Mês não encontrado"));
-		return new MesDTO(obj.get().getCodigo(), obj.get().getDsMes());
+		MesEntity obj = repo.findById(codigo).orElseThrow(() -> new EmptyResultDataAccessException("Mês não encontrado"));
+		return new MesDTO(obj.getCodigo(), obj.getDsMes());
 	}
 
 	@Override

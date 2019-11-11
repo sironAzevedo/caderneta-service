@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	private Integer size;
 
 	@Override
-	public void salvar(UsuarioDTO dto) {
+	public void criarUsuario(UsuarioDTO dto) {
 
 		if (repository.existsByEmail(dto.getEmail())) {
 			throw new UserException("Este e-mail já existe");
@@ -74,8 +73,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public void atualizar(UsuarioDTO dto) {
-		find(dto);
+	public void atualizarUsuario(UsuarioDTO dto) {
+		buscarUsuario(dto);
 		UsuarioEntity user = UsuarioEntity.builder()
 				.codigo(dto.getCodigo())
 				.nome(dto.getNome())
@@ -86,13 +85,13 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public void deletar(UsuarioDTO dto) {
-		find(dto);
+	public void deletarUsuario(UsuarioDTO dto) {
+		buscarUsuario(dto);
 		repository.deleteById(dto.getCodigo());
 	}
 
 	@Override
-	public List<UsuarioDTO> findAll() {
+	public List<UsuarioDTO> buscarUsuarios() {
 		List<UsuarioDTO> result = new ArrayList<>();
 		repository.findAll().forEach(user -> {
 			UsuarioDTO u = (UsuarioDTO) parseObject(user, new UsuarioDTO());
@@ -102,12 +101,12 @@ public class UsuarioServiceImpl implements IUsuarioService {
 	}
 
 	@Override
-	public UsuarioDTO find(UsuarioDTO dto) {
+	public UsuarioDTO buscarUsuario(UsuarioDTO dto) {
 		return recuperarUsuarioLogadoPorId(dto.getCodigo());
 	}
 
 	@Override
-	public UsuarioDTO findEmail(String email) {
+	public UsuarioDTO buscarUsuarioPorEmail(String email) {
 		return recuperarUsuarioLogadoPorEmail(email);
 	}
 
@@ -119,12 +118,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			throw new AuthorizationException(ACESSO_NEGADO);
 		}
 
-		Optional<UsuarioEntity> usuario = repository.findById(user.getCodigo());
-		if (!usuario.isPresent()) {
-			throw new UserException(USUARIO_NOT_NULL);
-		}
-
-		return (UsuarioDTO) parseObject(usuario.get(), new UsuarioDTO());
+		UsuarioEntity usuario = repository.findById(user.getCodigo()).orElseThrow(()-> new UserException(USUARIO_NOT_NULL));;
+		return (UsuarioDTO) parseObject(usuario, new UsuarioDTO());
 	}
 
 	@Override
@@ -132,12 +127,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 		User user = UserService.authenticated();
 		this.userValid(user, id);
 
-		Optional<UsuarioEntity> usuario = repository.findById(id);
-		if (!usuario.isPresent()) {
-			throw new UserException(USUARIO_NOT_NULL);
-		}
-
-		return (UsuarioDTO) parseObject(usuario.get(), new UsuarioDTO());
+		UsuarioEntity usuario = repository.findById(id).orElseThrow(()-> new UserException(USUARIO_NOT_NULL));
+		return (UsuarioDTO) parseObject(usuario, new UsuarioDTO());
 	}
 
 	@Override
@@ -148,12 +139,8 @@ public class UsuarioServiceImpl implements IUsuarioService {
 			throw new AuthorizationException(ACESSO_NEGADO);
 		}
 
-		Optional<UsuarioEntity> usuario = repository.findByEmail(email);
-		if (!usuario.isPresent()) {
-			throw new UserException(USUARIO_NOT_NULL);
-		}
-
-		return (UsuarioDTO) parseObject(usuario.get(), new UsuarioDTO());
+		UsuarioEntity usuario = repository.findByEmail(email).orElseThrow(()-> new UserException(USUARIO_NOT_NULL));
+		return (UsuarioDTO) parseObject(usuario, new UsuarioDTO());
 	}
 
 	@Override
