@@ -145,6 +145,7 @@ public class ContaServiceImpl implements IContaService {
 		UsuarioEntity user = (UsuarioEntity) parseObject(userService.recuperarUsuarioLogado(), new UsuarioEntity());
 		MesDTO mesDTO = mesService.buscarPorCodigo(mes);
 		Page<ContaEntity> result = repository.findByMesAndUsuario(new MesEntity(mesDTO), user, pageable);
+		
 		List<ContaDTO> appList = result.getContent().stream().map(c ->			
 			ContaDTO.builder()
 				.codigo(c.getCodigo())

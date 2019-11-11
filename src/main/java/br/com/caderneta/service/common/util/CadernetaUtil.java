@@ -5,9 +5,11 @@ import static org.jsoup.parser.Parser.unescapeEntities;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
@@ -44,8 +46,8 @@ public final class CadernetaUtil {
 		if (valor.equals(null) || valor.equals(new BigDecimal(0))) {
 			return null;
 		}
-
-		DecimalFormat df = new DecimalFormat("###,###.00");
+		
+		DecimalFormat df = new DecimalFormat("###,###.00", new DecimalFormatSymbols(new Locale( "pt", "BR" )));
 		return df.format(valor);
 	}
 
