@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.caderneta.service.models.dto.MesSalarioDTO;
 import br.com.caderneta.service.service.IMesSalarioService;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/v1")
 public class MesSalarioController {
@@ -32,40 +30,34 @@ public class MesSalarioController {
 	@PostMapping(value = "/salario")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void salvarMesSalario(@Valid @RequestBody MesSalarioDTO dto) {
-		log.info("O serviço salvar Mes Salario foi acionado");
 		service.salvar(dto);
 	}
-	
+
 	@ResponseBody
 	@PutMapping(value = "/salario")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void atualizarMesSalario(@Valid @RequestBody MesSalarioDTO dto) {
-		log.info("O serviço Atualiza Mes Salario foi acionado");
 		service.atualizar(dto);
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/salarios")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<MesSalarioDTO> consultarMesSalario() {
-		log.info("O serviço Buscar Todos Mes Salario foi acionado");
 		return service.buscarTodos();
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/salario")
 	@ResponseStatus(value = HttpStatus.OK)
 	public MesSalarioDTO buscarSalarioPorID(@RequestBody MesSalarioDTO dto) {
-		log.info("O serviço Buscar Mes Salario Por ID foi acionado");
 		return service.buscarPorCodigo(dto);
 	}
-	
+
 	@ResponseBody
 	@DeleteMapping(value = "/salario")
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void deletarMesSalario(@Valid @RequestBody MesSalarioDTO dto) {
-		log.info("O serviço deletar Mes Salario foi acionado");
 		service.deletar(dto);
 	}
-
 }

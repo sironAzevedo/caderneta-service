@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.caderneta.service.models.dto.MesDTO;
 import br.com.caderneta.service.service.IMesService;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/v1")
 public class MesController {
@@ -27,7 +25,6 @@ public class MesController {
 	@GetMapping(value = "/meses")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<MesDTO> consultarMeses() {
-		log.info("O serviço Buscar Todos Meses foi acionado");
 		return service.findAll();
 	}
 
@@ -35,15 +32,13 @@ public class MesController {
 	@GetMapping(value = "/mes")
 	@ResponseStatus(value = HttpStatus.OK)
 	public MesDTO buscarMesPorID(@RequestParam(value = "mes") Long mes) {
-		log.info("O serviço Buscar Mes Por ID foi acionado");
 		return service.buscarPorCodigo(mes);
 	}
-	
+
 	@ResponseBody
 	@GetMapping(value = "/meses/filtro")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<MesDTO> buscarMesesPorFiltro() {
-		log.info("O serviço Buscar Todos Meses foi acionado");
 		return service.buscarMesesPorFiltro();
 	}
 }

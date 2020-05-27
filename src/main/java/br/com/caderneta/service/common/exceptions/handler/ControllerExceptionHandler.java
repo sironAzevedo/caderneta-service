@@ -17,6 +17,7 @@ import br.com.caderneta.service.common.exceptions.DataIntegrityViolationExceptio
 import br.com.caderneta.service.common.exceptions.EmailException;
 import br.com.caderneta.service.common.exceptions.EmptyResultDataAccessException;
 import br.com.caderneta.service.common.exceptions.FileException;
+import br.com.caderneta.service.common.exceptions.InternalException;
 import br.com.caderneta.service.common.exceptions.NotFoundException;
 import br.com.caderneta.service.common.exceptions.QuantidadeParcelasException;
 import br.com.caderneta.service.common.exceptions.UserException;
@@ -47,6 +48,18 @@ public class ControllerExceptionHandler {
 		
 		return StandardError.builder()
 				.status(HttpStatus.NOT_FOUND.value())
+				.mensagem(e.getMessage())
+				.timestamp(new Date())
+				.build();
+	} 
+	
+	@ResponseBody
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(InternalException.class)
+	public StandardError internalException(InternalException e) {
+		
+		return StandardError.builder()
+				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.mensagem(e.getMessage())
 				.timestamp(new Date())
 				.build();

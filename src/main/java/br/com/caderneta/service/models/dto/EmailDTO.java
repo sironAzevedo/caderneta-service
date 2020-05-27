@@ -7,22 +7,20 @@ import javax.validation.constraints.NotEmpty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
+@Data
 @Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmailDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@Getter
-	@Setter
-	@Email(message="Email inválido")
-	@NotEmpty(message="Preenchimento obrigatório")
+
+	@Email(message = "Email inválido")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String email;
 
 }

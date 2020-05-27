@@ -1,9 +1,7 @@
 package br.com.caderneta.service.service.impl;
 
-import static br.com.caderneta.service.common.util.CadernetaUtil.formatValor;
 import static br.com.caderneta.service.common.util.CadernetaUtil.parseObject;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,11 +20,9 @@ import br.com.caderneta.service.configuracao.seguranca.UserService;
 import br.com.caderneta.service.models.dto.ContaDTO;
 import br.com.caderneta.service.models.dto.MesDTO;
 import br.com.caderneta.service.models.dto.StatusContaDTO;
-import br.com.caderneta.service.models.dto.TipoContaDTO;
 import br.com.caderneta.service.models.entity.ContaEntity;
 import br.com.caderneta.service.models.entity.MesEntity;
 import br.com.caderneta.service.models.entity.StatusContaEntity;
-import br.com.caderneta.service.models.entity.TipoContaEntity;
 import br.com.caderneta.service.models.entity.UsuarioEntity;
 import br.com.caderneta.service.repository.IContaRepository;
 import br.com.caderneta.service.repository.IStatusContaRepository;
@@ -39,7 +35,7 @@ public class ContaServiceImpl implements IContaService {
 
 	@Autowired
 	private IContaRepository repository;
-	
+
 	@Autowired
 	private IStatusContaRepository statusRepo;
 
@@ -51,51 +47,26 @@ public class ContaServiceImpl implements IContaService {
 
 	@Override
 	public void salvar(ContaDTO dto) {
-		isParcelado(dto.getStatus().getDescricao(), dto.getQtdParcelas()); 
-		
+		isParcelado(dto.getStatus().getDescricao(), dto.getQtdParcelas());
+
 		UsuarioEntity user = (UsuarioEntity) parseObject(userService.recuperarUsuarioLogado(), new UsuarioEntity());
 		MesDTO mes = mesService.buscarPorCodigo(dto.getMes().getCodigo());
-		
-		ContaEntity entity = ContaEntity.
-				builder()
-				.valorConta(formatValor(dto.getValorConta()))
-				.dataVencimento(dto.getDataVencimento())
-				.dataPagamento(dto.getDataPagamento())
-				.status((StatusContaEntity) parseObject(dto.getStatus(), new StatusContaEntity()))
-				.qtdParcelas(dto.getQtdParcelas())
-				.comentario(dto.getComentario())
-				.mes(new MesEntity(mes))
-				.tipoConta(new TipoContaEntity(dto.getTipoConta()))
-				.usuario(user)
-				.createdAt(new Date()) 
-				.build();  
+		ContaEntity entity = ContaEntity.contaEntity(dto, mes, user);
 		repository.saveAndFlush(entity);
-	} 
+	}
 
 	@Override
 	public void atualizar(ContaDTO dto) {
-		isParcelado(dto.getStatus().getDescricao(), dto.getQtdParcelas()); 
-		buscarContaPorId(dto.getCodigo()); 
-		
+		isParcelado(dto.getStatus().getDescricao(), dto.getQtdParcelas());
+		buscarContaPorId(dto.getCodigo());
+
 		UsuarioEntity user = (UsuarioEntity) parseObject(userService.recuperarUsuarioLogado(), new UsuarioEntity());
 		MesDTO mes = mesService.buscarPorCodigo(dto.getMes().getCodigo());
-		
-		ContaEntity entity = ContaEntity.
-				builder()
-				.codigo(dto.getCodigo())
-				.valorConta(formatValor(dto.getValorConta()))
-				.dataVencimento(dto.getDataVencimento())
-				.dataPagamento(dto.getDataPagamento())
-				.status((StatusContaEntity) parseObject(dto.getStatus(), new StatusContaEntity()))
-				.qtdParcelas(dto.getQtdParcelas())
-				.comentario(dto.getComentario())
-				.mes(new MesEntity(mes))
-				.tipoConta(new TipoContaEntity(dto.getTipoConta()))
-				.usuario(user)
-				.build();
+
+		ContaEntity entity = ContaEntity.contaEntity(dto, mes, user);
 		repository.saveAndFlush(entity);
 	}
-	
+
 	@Override
 	public void deletar(Long id) {
 		buscarContaPorId(id);
@@ -105,102 +76,50 @@ public class ContaServiceImpl implements IContaService {
 	@Override
 	public List<ContaDTO> findAll() {
 		UsuarioEntity usuario = (UsuarioEntity) parseObject(userService.recuperarUsuarioLogado(), new UsuarioEntity());
-
-		return repository.findByUsuario(usuario).stream().map(c ->
-		ContaDTO.builder()
-			.codigo(c.getCodigo())
-			.valorConta(formatValor(c.getValorConta()))
-			.dataVencimento(c.getDataVencimento())
-			.dataPagamento(c.getDataPagamento())
-			.status((StatusContaDTO) parseObject(c.getStatus(), new StatusContaDTO()))
-			.qtdParcelas(c.getQtdParcelas())
-			.comentario(c.getComentario())
-			.mes(MesDTO.builder().codigo(c.getMes().getCodigo()).build())
-			.tipoConta((TipoContaDTO) parseObject(c.getTipoConta(), new TipoContaDTO()))
-			.build()
-		).collect(Collectors.toList());
+		return repository.findByUsuario(usuario).stream().map(c -> ContaDTO.conta(c)).collect(Collectors.toList());
 	}
 
 	@Override
 	public ContaDTO buscarContaPorId(Long id) {
 		User user = UserService.authenticated();
-		ContaEntity c = repository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException("Conta não encontrada"));
+		ContaEntity c = repository.findById(id)
+				.orElseThrow(() -> new EmptyResultDataAccessException("Conta não encontrada"));
 		userService.userValid(user, c.getUsuario().getCodigo());
-		
-		return ContaDTO.builder()
-				.codigo(c.getCodigo())
-				.valorConta(formatValor(c.getValorConta()))
-				.dataVencimento(c.getDataVencimento())
-				.dataPagamento(c.getDataPagamento())
-				.status((StatusContaDTO) parseObject(c.getStatus(), new StatusContaDTO()))
-				.qtdParcelas(c.getQtdParcelas())
-				.comentario(c.getComentario())
-				.mes(MesDTO.builder().codigo(c.getMes().getCodigo()).dsMes(c.getMes().getDsMes()).build())
-				.tipoConta((TipoContaDTO) parseObject(c.getTipoConta(), new TipoContaDTO()))
-				.build(); 
-	} 
+		return ContaDTO.conta(c);
+	}
 
 	@Override
 	public List<ContaDTO> buscarContasPorMes(Long mes, Pageable pageable) {
 		UsuarioEntity user = (UsuarioEntity) parseObject(userService.recuperarUsuarioLogado(), new UsuarioEntity());
 		MesDTO mesDTO = mesService.buscarPorCodigo(mes);
 		Page<ContaEntity> result = repository.findByMesAndUsuario(new MesEntity(mesDTO), user, pageable);
-		
-		List<ContaDTO> appList = result.getContent().stream().map(c ->			
-			ContaDTO.builder()
-				.codigo(c.getCodigo())
-				.valorConta(formatValor(c.getValorConta()))
-				.dataVencimento(c.getDataVencimento())
-				.dataPagamento(c.getDataPagamento())
-				.status((StatusContaDTO) parseObject(c.getStatus(), new StatusContaDTO()))
-				.qtdParcelas(c.getQtdParcelas())
-				.comentario(c.getComentario())
-				.mes(MesDTO.builder().codigo(c.getMes().getCodigo()).dsMes(c.getMes().getDsMes()).build())
-				.tipoConta((TipoContaDTO) parseObject(c.getTipoConta(), new TipoContaDTO()))
-				.build()				
-		 ).collect(Collectors.toList());
-		
-		return appList;
+		return result.getContent().stream().map(c -> ContaDTO.conta(c)).collect(Collectors.toList());
 	}
 
 	@Override
-	public List<ContaDTO> busarContasPorStatus(Long status, Long mes, Pageable pageable){
+	public List<ContaDTO> busarContasPorStatus(Long status, Long mes, Pageable pageable) {
 		UsuarioEntity user = (UsuarioEntity) parseObject(userService.recuperarUsuarioLogado(), new UsuarioEntity());
 		Optional<StatusContaEntity> statusEntity = statusRepo.findById(status);
 		MesDTO mesDTO = mesService.buscarPorCodigo(mes);
-		
-		Page<ContaEntity> contas = repository.findByStatusAndMesAndUsuario(statusEntity.get(), new MesEntity(mesDTO), user, pageable);
-		List<ContaDTO>  appList = contas.getContent().stream().map(c ->ContaDTO.builder()
-				.codigo(c.getCodigo())
-				.valorConta(formatValor(c.getValorConta()))
-				.dataVencimento(c.getDataVencimento())
-				.dataPagamento(c.getDataPagamento())
-				.status((StatusContaDTO) parseObject(c.getStatus(), new StatusContaDTO()))
-				.qtdParcelas(c.getQtdParcelas())
-				.comentario(c.getComentario())
-				.mes(MesDTO.builder().codigo(c.getCodigo()).build())
-				.tipoConta((TipoContaDTO) parseObject(c.getTipoConta(), new TipoContaDTO()))
-				.build()
-		).collect(Collectors.toList());
-		
-		return appList;		
+
+		Page<ContaEntity> contas = repository.findByStatusAndMesAndUsuario(statusEntity.get(), new MesEntity(mesDTO),
+				user, pageable);
+		return contas.getContent().stream().map(c -> ContaDTO.conta(c)).collect(Collectors.toList());
 	}
-	
+
 	private void isParcelado(String status, Integer qtdParcelas) {
-		if(StatusConta.PARCELADO.getCodigo().equals(status)) {
-			if(qtdParcelas == null) {
+		if (StatusConta.PARCELADO.getCodigo().equals(status)) {
+			if (qtdParcelas == null) {
 				throw new QuantidadeParcelasException("Informe a quantidade de parcelas");
 			}
-		} 
+		}
 	}
 
 	@Override
 	@Cacheable("statusConta")
 	public List<StatusContaDTO> buscarStatusConta() {
-		return statusRepo.findAll().stream().map(s -> StatusContaDTO.builder()
-				.codigo(s.getCodigo())
-				.descricao(s.getDescricao())
-				.build()
-			).collect(Collectors.toList());
+		return statusRepo.findAll().stream()
+				.map(s -> StatusContaDTO.builder().codigo(s.getCodigo()).descricao(s.getDescricao()).build())
+				.collect(Collectors.toList());
 	}
 }

@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.caderneta.service.models.dto.TipoContaDTO;
 import br.com.caderneta.service.service.ITipoContaService;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/v1")
 public class TipoContaController {
@@ -27,7 +25,6 @@ public class TipoContaController {
 	@GetMapping(value = "/tipo/contas")
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<TipoContaDTO> consultarTipoConta() {
-		log.info("O serviço Buscar Tipo Conta foi acionado");
 		return service.buscarTodos();
 	}
 
@@ -35,7 +32,6 @@ public class TipoContaController {
 	@GetMapping(value = "/tipo/conta")
 	@ResponseStatus(value = HttpStatus.OK)
 	public TipoContaDTO buscarTipoConta(@RequestParam(value = "tipo") Long tipo) {
-		log.info("O serviço Buscar Tipo Conta Por ID foi acionado");
 		return service.buscarTipoConta(tipo);
 	}
 }

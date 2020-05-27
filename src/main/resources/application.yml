@@ -1,18 +1,43 @@
+server:
+  servlet:
+    context-path: /sgcp
+
 spring:
   profiles:
-    active: dev
+    active: ${ENVIRONMENT}
   servlet:
     multipart:
       max-file-size: 10MB
-      max-request-size: 10MB
-      
-server:
-  servlet:
-    context-path: /sgcp      
+      max-request-size: 10MB  
+  datasource:
+    url: ${DATABASE_URL}
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: never
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1   
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+    hibernate:
+      ddl-auto: none    properties:      hibernate:
+        default_schema: ${DATABASE_SCHEMA}
+        dialect: org.hibernate.dialect.PostgreSQLDialect 
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          temp:
+            use_jdbc_metadata_defaults: false
+
+database:
+  user: ${DATABASE_USER}
+  pass: ${DATABASE_PASS}
 
 aws:
-  access_key_id: ''
-  secret_access_key: ''
+  access_key_id: ${S3_KEY}
+  secret_access_key: ${S3_SECRET}
+  s3:
+    bucket: caderneta-conta
+    region: sa-east-1
   
 img:
   prefix:
@@ -22,12 +47,12 @@ img:
     size: 200
     
 mail:
-  username: ''
-  password: ''
+  username: ${EMAIL_USER}
+  password: ${EMAIL_PASS}
   smtp:
     auth: true
     debug: true
-    from: ''
+    from: ${EMAIL_USER}
     host: smtp.googlemail.com
     port: 465
     socketFactory:
@@ -41,10 +66,8 @@ mail:
       required: true
   test-connection: true
   transport:
-    protocol: smtp  
-  
-s3:
-  bucket: caderneta-conta
-  region: sa-east-1
-    
-
+    protocol: smtp
+        
+jwt:
+  expiration: ${JWT_EXPIRATION}
+  secret: ${JWT_SECRET}

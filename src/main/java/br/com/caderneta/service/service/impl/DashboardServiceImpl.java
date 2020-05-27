@@ -32,7 +32,8 @@ public class DashboardServiceImpl implements IDashboardService {
 	public List<DashboardDTO> findAll(Pageable pageable) {
 		UsuarioDTO user = userService.recuperarUsuarioLogado();
 		Page<DashboardEntity> result = repository.findByIdUsuario(new BigDecimal(user.getCodigo()), pageable);
-		List<DashboardDTO> appList = result.getContent().stream().map(d -> DashboardDTO.builder()
+		 return result.getContent().stream().map(d -> 
+		 	DashboardDTO.builder()
 				.codigo(d.getCodigo())
 				.mes(d.getMes())
 				.ano(d.getAno())
@@ -41,7 +42,5 @@ public class DashboardServiceImpl implements IDashboardService {
 				.totalGastos(formatValor(d.getTotalGastos()))
 				.saldoFinal(formatValor(d.getSaldoFinal())) 
 				.build()).collect(Collectors.toList());
-		
-		return appList;
 	}
 }

@@ -12,12 +12,12 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
+@Data
 @Entity
 @ToString
 @Builder
@@ -29,15 +29,11 @@ public class StatusContaEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Getter
-	@Setter
 	@Column(name = "ID")
 	@GeneratedValue(generator = "STATUS_CONTA_ID_SEQ", strategy = GenerationType.IDENTITY)
 	@SequenceGenerator(name = "STATUS_CONTA_ID_SEQ", sequenceName = "SGCP.STATUS_CONTA_ID_SEQ", allocationSize = 1)
 	private Long codigo;
 
-	@Getter
-	@Setter
 	@Column(name = "DESCRICAO")
 	private String descricao;
 }

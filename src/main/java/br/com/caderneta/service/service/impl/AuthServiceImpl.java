@@ -1,7 +1,6 @@
 package br.com.caderneta.service.service.impl;
 
 import java.util.Date;
-import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,16 +29,13 @@ public class AuthServiceImpl implements IAuthService {
 
 	@Override
 	public void sendNewPassword(String email) {
-		Optional<UsuarioEntity> user = userRepository.findByEmail(email);
-		if (user == null) {
-			throw new UserException("Usuario não encontrado");
-		}
-
+		UsuarioEntity user = userRepository.findByEmail(email).orElseThrow(() -> new UserException("Usuario não encontrado"));
+		
 		String newPass = newPassword();
-		user.get().setSenha(pe.encode(newPass));
-		user.get().setUpdatedAt(new Date());
-		userRepository.saveAndFlush(user.get());
-		emailService.sendNewPasswordEmail(user.get().getEmail() , newPass);
+		user.setSenha(pe.encode(newPass));
+		user.setUpdatedAt(new Date());
+		userRepository.saveAndFlush(user);
+		emailService.sendNewPasswordEmail(user.getEmail() , newPass);
 	}
 
 	private String newPassword() {

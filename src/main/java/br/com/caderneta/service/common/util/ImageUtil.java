@@ -16,6 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.caderneta.service.common.exceptions.FileException;
 
 public final class ImageUtil {
+	
+	private ImageUtil() {
+		super();
+	}
 
 	public static final BufferedImage getJpgImageFromFile(MultipartFile file) {
 		String ext = FilenameUtils.getExtension(file.getOriginalFilename().toLowerCase());
@@ -63,9 +67,5 @@ public final class ImageUtil {
 		} catch (IOException e) {
 			throw new FileException("Erro ao ler arquivo");
 		}
-	} 
-	
-	private ImageUtil() {
-		super();
-	}
+	}  
 }

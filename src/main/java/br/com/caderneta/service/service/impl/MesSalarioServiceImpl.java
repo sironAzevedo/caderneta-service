@@ -75,7 +75,10 @@ public class MesSalarioServiceImpl implements IMesSalarioService {
 				.orElseThrow(() -> new EmptyResultDataAccessException("Conta não encontrada"));
 		userService.userValid(user, salario.getUsuario().getCodigo());
 
-		return MesSalarioDTO.builder().codigo(salario.getCodigo()).valorSalario(formatValor(salario.getValorSalario()))
-				.mes((MesDTO) parseObject(salario.getMes(), new MesDTO())).build();
+		return MesSalarioDTO.builder()
+				.codigo(salario.getCodigo())
+				.valorSalario(formatValor(salario.getValorSalario()))
+				.mes((MesDTO) parseObject(salario.getMes(), new MesDTO()))
+				.build();
 	}
 }

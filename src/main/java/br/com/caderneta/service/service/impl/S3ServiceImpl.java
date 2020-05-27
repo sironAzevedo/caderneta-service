@@ -24,7 +24,7 @@ public class S3ServiceImpl implements IS3Service {
 	@Autowired
 	private AmazonS3 s3client;
 
-	@Value("${s3.bucket}")
+	@Value("${aws.s3.bucket}")
 	private String bucketName;
 
 	@Override
